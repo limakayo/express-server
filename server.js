@@ -1,16 +1,18 @@
-var express 	= require('express')
-  , app 		= express()
-  , mongoose 	= require('mongoose')
+var express 	  = require('express')
+  , app 		    = express()
+  , cors        = require('cors')
+  , mongoose 	  = require('mongoose')
   , bodyParser 	= require('body-parser')
   , db
-  , Cliente		= require('./app/models/cliente')
+  , Cliente		  = require('./app/models/cliente')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+app.use(cors())
 
 mongoose.connect('mongodb://limakayo:132934@ds023500.mlab.com:23500/intranet')
 
-var port = process.env.PORT || 3000
+var port = process.env.PORT || 8000
 
 // ROUTES FOR OUR API
 // =========================================
@@ -33,38 +35,44 @@ router.route('/clientes')
 		cliente.nome = req.body.nome
 
 		cliente.save((err) => {
-			if (err) res.send(err)
-			res.json({ message: 'Cliente created'})
+			if (err)
+        res.send(err)
+			else {
+			  res.json({ cliente })
+			}
 		})
 	})
 	.get((req, res) => {
 		Cliente.find((err, clientes) => {
 			if (err) res.send(err)
-			res.json(clientes)
+			res.json({ clientes })
 		})
 	})
 
-router.route('/clientes/:cliente_id')
+router.route('/clientes/:id')
 	.get((req, res) => {
-		Cliente.findById(req.params.cliente_id, (err, cliente) => {
+		Cliente.findById(req.params.id, (err, cliente) => {
 			if (err) res.send(err)
 			res.json(cliente)
 		})
 	})
 	.put((req, res) => {
-		Cliente.findById(req.params.cliente_id, (err, cliente) => {
-			if (err) res.send(err)
-
-			cliente.nome = req.body.nome
-
-			cliente.save((err) => {
-				if (err) res.send(err)
-				res.json({ message: 'Cliente updated' })
-			})
+		Cliente.findById(req.params.id, (err, cliente) => {
+			if (err)
+        res.send(err)
+      else {
+        cliente.nome = req.body.cliente.nome
+        cliente.save((err) => {
+          if (err)
+            res.send(err)
+          else
+            res.json({ cliente: cliente, message: 'Cliente atualizado com sucesso' })
+        })
+      }
 		})
 	})
 	.delete((req, res) => {
-		Cliente.remove({ _id: req.params.cliente_id }, (err, cliente) => {
+		Cliente.remove({ _id: req.params.id }, (err, cliente) => {
 			if (err) res.send(err)
 			res.json({ message: 'Succesfully deleted' })
 		})
