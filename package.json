@@ -11,7 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.1",
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "express-jwt": "^3.4.0"
   },
   "devDependencies": {
     "nodemon": "^1.8.1"
