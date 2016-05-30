@@ -41,16 +41,16 @@ router.use(authCheck, (err, req, res, next) => {
 router.route('/ordens')
   .post((req, res) => {
     var ordem = new Ordem()
-    ordem.numero = req.body.numero
+    ordem.numero = req.body.form.numero
     ordem.save((err) => {
       if (err) res.json(err)
-      else res.json({ ordem })
+      res.json({ ordem })
     })
   })
   .get((req, res) => {
     Ordem.find((err, ordens) => {
       if (err) res.send(err)
-        res.json({ ordens })
+      res.json({ ordens })
     })
   })
 
