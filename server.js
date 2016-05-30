@@ -7,6 +7,7 @@ var express 	  = require('express')
   , db
   , util        = require('util')
   , Cliente		  = require('./app/models/cliente')
+  , Ordem       = require('./app/models/ordem')
   , User        = require('./app/models/user')
 
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -37,9 +38,25 @@ router.use(authCheck, (err, req, res, next) => {
   }
 })
 
+router.route('/ordens')
+  .post((req, res) => {
+    var ordem = new Ordem()
+    ordem.numero = req.body.numero
+    ordem.save((err) => {
+      if (err) res.json(err)
+      else res.json({ ordem })
+    })
+  })
+  .get((req, res) => {
+    Ordem.find((err, ordens) => {
+      if (err) res.send(err)
+        res.json({ ordens })
+    })
+  })
+
 router.route('/users')
   .post((req, res) => {
-    User.findOne({email: req.body.user.email }, (err, user) => {
+    /*User.findOne({email: req.body.user.email }, (err, user) => {
 
       if (err) res.json(err)
 
@@ -58,13 +75,16 @@ router.route('/users')
         })
       }
 
-    })
+    })*/
+    res.json(req.user.app_metadata.roles[0])
   })
   .get((req, res) => {
-    User.find((err, users) => {
+    /*User.find((err, users) => {
       if (err) res.send(err)
       res.json({ users })
-    })
+    })*/
+
+    res.json(req.user)
   })
 
 router.route('/users/:email')
