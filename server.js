@@ -11,6 +11,9 @@ var ordens        = require('./app/routes/ordens')
   , users         = require('./app/routes/users')
   , equipamentos  = require('./app/routes/equipamentos')
   , acessorios    = require('./app/routes/acessorios')
+  , atendimentos  = require('./app/routes/atendimentos')
+  , transportes   = require('./app/routes/transportes')
+  , andamentos    = require('./app/routes/andamentos')
 
 var app = express()
 
@@ -43,6 +46,9 @@ app.use('/api/clientes', clientes);
 app.use('/api/users', users);
 app.use('/api/equipamentos', equipamentos);
 app.use('/api/acessorios', acessorios);
+app.use('/api/atendimentos', atendimentos);
+app.use('/api/transportes', transportes);
+app.use('/api/andamentos', andamentos);
 
 app.listen(port)
 console.log('Magic happens on port: ' + port)
